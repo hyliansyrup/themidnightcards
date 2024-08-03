@@ -1,7 +1,7 @@
-<html><head><base href="https://websim.io/midnight-tarot/">
+<html><head><base href="https://websim.io/midnight-cards/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Midnight Seer</title>
+<title>The Midnight Cards</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
 
@@ -63,7 +63,7 @@
 
   .header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
     position: relative;
@@ -85,6 +85,8 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: titleGradient 10s ease infinite, titleFloat 3s ease-in-out infinite;
+    width: 100%;
+    text-align: center;
   }
 
   @keyframes titleGradient {
@@ -337,9 +339,6 @@
   }
 
   #homeButton {
-    position: absolute;
-    top: 20px;
-    right: 20px;
     background: none;
     border: none;
     cursor: pointer;
@@ -355,6 +354,16 @@
     width: 40px;
     height: 40px;
     fill: var(--secondary-color);
+  }
+
+  #languageSelector {
+    background: rgba(255, 105, 180, 0.2);
+    border: none;
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
   }
 
   @keyframes fadeInUp {
@@ -411,14 +420,19 @@
 </head>
 <body>
   <div class="tarot-container">
-    <button id="homeButton" onclick="goHome()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-      </svg>
-    </button>
     <div class="header">
-      <h1>The Midnight Seer</h1>
+      <button id="homeButton" onclick="goHome()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      </button>
+      <select id="languageSelector" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+      </select>
     </div>
+    <h1 id="title">The Midnight Cards</h1>
     <div id="midnightSeerCard">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" width="100%" height="100%">
         <defs>
@@ -436,130 +450,143 @@
       </svg>
     </div>
     <div id="drawOptions">
-      <button onclick="drawCards(1)">Draw 1 Card</button>
-      <button onclick="drawCards(3)">Draw 3 Cards</button>
-      <button onclick="drawCards(5)">Draw 5 Cards</button>
+      <button onclick="drawCards(1)" id="draw1">Draw 1 Card</button>
+      <button onclick="drawCards(3)" id="draw3">Draw 3 Cards</button>
+      <button onclick="drawCards(5)" id="draw5">Draw 5 Cards</button>
     </div>
     <div class="cards-container" id="cardsContainer"></div>
     <div id="readings"></div>
     <div id="history">
-      <h3 onclick="toggleHistory()">Reading History ▼</h3>
+      <h3 onclick="toggleHistory()" id="historyTitle">Reading History ▼</h3>
       <ul id="historyList"></ul>
     </div>
     <footer>Created with ✨ by <a href="https://github.com/HylianSyrup" target="_blank">HylianSyrup</a></footer>
   </div>
 
   <script>
+    const translations = {
+      en: {
+        title: "The Midnight Cards",
+        draw1: "Draw 1 Card",
+        draw3: "Draw 3 Cards",
+        draw5: "Draw 5 Cards",
+        historyTitle: "Reading History",
+        prediction: "The mystical energies reveal that ",
+        cardNames: {
+          "Le Bateleur": "The Magician",
+          "La Papesse": "The High Priestess",
+          "L'Impératrice": "The Empress",
+          "L'Empereur": "The Emperor",
+          "Le Pape": "The Hierophant"
+        }
+      },
+      fr: {
+        title: "Les Cartes de Minuit",
+        draw1: "Tirer 1 Carte",
+        draw3: "Tirer 3 Cartes",
+        draw5: "Tirer 5 Cartes",
+        historyTitle: "Historique des Tirages",
+        prediction: "Les énergies mystiques révèlent que ",
+        cardNames: {
+          "Le Bateleur": "Le Bateleur",
+          "La Papesse": "La Papesse",
+          "L'Impératrice": "L'Impératrice",
+          "L'Empereur": "L'Empereur",
+          "Le Pape": "Le Pape"
+        }
+      },
+      es: {
+        title: "Las Cartas de Medianoche",
+        draw1: "Sacar 1 Carta",
+        draw3: "Sacar 3 Cartas",
+        draw5: "Sacar 5 Cartas",
+        historyTitle: "Historial de Lecturas",
+        prediction: "Las energías místicas revelan que ",
+        cardNames: {
+          "Le Bateleur": "El Mago",
+          "La Papesse": "La Sacerdotisa",
+          "L'Impératrice": "La Emperatriz",
+          "L'Empereur": "El Emperador",
+          "Le Pape": "El Sumo Sacerdote"
+        }
+      }
+    };
+
+    let currentLanguage = 'en';
+
     const tarotCards = [
       {
-        name: "The Enchanted Sun",
-        meaning: "A magical radiance illuminates your path, bringing joy and success. Embrace the mystical warmth in your life.",
+        name: "Le Bateleur",
+        meaning: {
+          en: "Skill, diplomacy, address, subtlety; sickness, pain, loss, disaster, snares of enemies; self-confidence, will; the Querent, if male.",
+          fr: "Habileté, diplomatie, adresse, subtilité ; maladie, douleur, perte, désastre, pièges des ennemis ; confiance en soi, volonté ; le Consultant, si masculin.",
+          es: "Habilidad, diplomacia, dirección, sutileza; enfermedad, dolor, pérdida, desastre, trampas de enemigos; confianza en sí mismo, voluntad; el Consultante, si es hombre."
+        },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <defs>
-            <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-              <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
-            </radialGradient>
-          </defs>
-          <rect width="100" height="180" fill="#3d1c56" />
-          <circle cx="50" cy="60" r="30" fill="url(#sunGradient)" />
-          <g stroke="#FFD700" stroke-width="2" fill="none">
-            <path d="M50 20 L50 10" />
-            <path d="M50 100 L50 110" />
-            <path d="M20 60 L10 60" />
-            <path d="M90 60 L80 60" />
-            <path d="M26 36 L19 29" />
-            <path d="M74 84 L81 91" />
-            <path d="M74 36 L81 29" />
-            <path d="M26 84 L19 91" />
-          </g>
-          <path d="M30 120 Q50 140 70 120 T110 120" stroke="#FFD700" stroke-width="2" fill="none" />
-          <path d="M30 140 Q50 160 70 140 T110 140" stroke="#FFD700" stroke-width="2" fill="none" />
-          <path d="M30 160 Q50 180 70 160 T110 160" stroke="#FFD700" stroke-width="2" fill="none" />
+          <rect width="100" height="180" fill="#f0e68c" />
+          <circle cx="50" cy="40" r="20" fill="#4169e1" />
+          <rect x="30" y="70" width="40" height="80" fill="#8b4513" />
+          <path d="M20 160 Q50 140 80 160" stroke="#000" stroke-width="2" fill="none" />
+          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">I</text>
         </svg>`
       },
       {
-        name: "The Mystic Moon",
-        meaning: "Your inner wisdom is heightened. Navigate through the shadows by trusting your magical intuition.",
+        name: "La Papesse",
+        meaning: {
+          en: "Secrets, mystery, the future as yet unrevealed; the woman who interests the Querent, if male; the Querent herself, if female; silence, tenacity; mystery, wisdom, science.",
+          fr: "Secrets, mystère, l'avenir encore non révélé ; la femme qui intéresse le Consultant, si masculin ; la Consultante elle-même, si féminine ; silence, ténacité ; mystère, sagesse, science.",
+          es: "Secretos, misterio, el futuro aún no revelado; la mujer que interesa al Consultante, si es hombre; la Consultante misma, si es mujer; silencio, tenacidad; misterio, sabiduría, ciencia."
+        },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <defs>
-            <radialGradient id="moonGradient" cx="70%" cy="70%" r="50%" fx="70%" fy="70%">
-              <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#C0C0C0;stop-opacity:1" />
-            </radialGradient>
-          </defs>
-          <rect width="100" height="180" fill="#0f0a1e" />
-          <path d="M30,60 a1,1 0 0,0 40,0 a1,1 0 0,1 -20,0 a1,1 0 0,1 -20,0" fill="url(#moonGradient)" />
-          <circle cx="25" cy="45" r="2" fill="#FFFFFF" />
-          <circle cx="40" cy="30" r="1.5" fill="#FFFFFF" />
-          <circle cx="60" cy="20" r="1" fill="#FFFFFF" />
-          <circle cx="75" cy="40" r="1.2" fill="#FFFFFF" />
-          <circle cx="20" cy="70" r="1.3" fill="#FFFFFF" />
-          <path d="M20 100 Q50 120 80 100" stroke="#C0C0C0" stroke-width="1" fill="none" />
-          <path d="M30 130 Q50 150 70 130" stroke="#C0C0C0" stroke-width="1" fill="none" />
-          <path d="M40 160 Q50 170 60 160" stroke="#C0C0C0" stroke-width="1" fill="none" />
+          <rect width="100" height="180" fill="#f0e68c" />
+          <path d="M30 40 L50 20 L70 40 L70 160 L30 160 Z" fill="#4169e1" />
+          <circle cx="50" cy="60" r="15" fill="#fff" />
+          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">II</text>
         </svg>`
       },
       {
-        name: "The Cosmic Star",
-        meaning: "Celestial energies guide your aspirations. Believe in your magical potential and your dreams will manifest.",
+        name: "L'Impératrice",
+        meaning: {
+          en: "Fruitfulness, action, initiative, length of days; the unknown, clandestine; also difficulty, doubt, ignorance.",
+          fr: "Fécondité, action, initiative, longévité ; l'inconnu, le clandestin ; aussi difficulté, doute, ignorance.",
+          es: "Fecundidad, acción, iniciativa, longevidad; lo desconocido, lo clandestino; también dificultad, duda, ignorancia."
+        },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <defs>
-            <radialGradient id="starGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-              <stop offset="0%" style="stop-color:#FFFACD;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
-            </radialGradient>
-          </defs>
-          <rect width="100" height="180" fill="#191970" />
-          <polygon points="50,20 61,50 93,50 67,70 77,100 50,80 23,100 33,70 7,50 39,50" fill="url(#starGradient)" />
-          <circle cx="20" cy="30" r="1" fill="#FFFFFF" />
-          <circle cx="80" cy="40" r="1.2" fill="#FFFFFF" />
-          <circle cx="35" cy="120" r="0.8" fill="#FFFFFF" />
-          <circle cx="70" cy="140" r="1.1" fill="#FFFFFF" />
-          <circle cx="15" cy="160" r="0.9" fill="#FFFFFF" />
-          <path d="M10 110 Q50 130 90 110" stroke="#FFD700" stroke-width="1" fill="none" />
-          <path d="M20 150 Q50 170 80 150" stroke="#FFD700" stroke-width="1" fill="none" />
+          <rect width="100" height="180" fill="#f0e68c" />
+          <path d="M20 60 Q50 20 80 60" fill="#ff69b4" />
+          <rect x="35" y="60" width="30" height="80" fill="#4169e1" />
+          <circle cx="50" cy="40" r="15" fill="#ffd700" />
+          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">III</text>
         </svg>`
       },
       {
-        name: "The Enchanted Lovers",
-        meaning: "Magical connections are highlighted. Make choices with your heart and nurture the spellbinding bonds in your life.",
+        name: "L'Empereur",
+        meaning: {
+          en: "Stability, power, protection, realization; a great person; aid, reason, conviction; also authority and will.",
+          fr: "Stabilité, pouvoir, protection, réalisation ; une grande personne ; aide, raison, conviction ; aussi autorité et volonté.",
+          es: "Estabilidad, poder, protección, realización; una gran persona; ayuda, razón, convicción; también autoridad y voluntad."
+        },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <defs>
-            <radialGradient id="heartGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-              <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#FF1493;stop-opacity:1" />
-            </radialGradient>
-          </defs>
-          <rect width="100" height="180" fill="#4B0082" />
-          <path d="M30,50 Q50,80 70,50 T90,20 Q70,0 50,20 T10,20 Q30,0 50,20" fill="url(#heartGradient)" />
-          <circle cx="35" cy="40" r="5" fill="#FFD700" />
-          <circle cx="65" cy="40" r="5" fill="#FFD700" />
-          <path d="M40 60 Q50 70 60 60" fill="none" stroke="#FFD700" stroke-width="2" />
-          <path d="M20 100 Q50 120 80 100" stroke="#FF69B4" stroke-width="1" fill="none" />
-          <path d="M30 130 Q50 150 70 130" stroke="#FF69B4" stroke-width="1" fill="none" />
-          <path d="M40 160 Q50 170 60 160" stroke="#FF69B4" stroke-width="1" fill="none" />
+          <rect width="100" height="180" fill="#f0e68c" />
+          <rect x="30" y="40" width="40" height="100" fill="#8b4513" />
+          <path d="M20 30 L50 10 L80 30" stroke="#ffd700" stroke-width="2" fill="none" />
+          <circle cx="50" cy="50" r="15" fill="#ff0000" />
+          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">IIII</text>
         </svg>`
       },
       {
-        name: "The Arcane Magician",
-        meaning: "You possess mystical tools to manifest your desires. Harness your magical abilities and believe in your enchanted potential.",
+        name: "Le Pape",
+        meaning: {
+          en: "Marriage, alliance, captivity, servitude; by another account, mercy and goodness; inspiration; the man to whom the Querent has recourse.",
+          fr: "Mariage, alliance, captivité, servitude ; selon un autre compte, miséricorde et bonté ; inspiration ; l'homme auquel le Consultant a recours.",
+          es: "Matrimonio, alianza, cautiverio, servidumbre; según otra cuenta, misericordia y bondad; inspiración; el hombre al que recurre el Consultante."
+        },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <defs>
-            <linearGradient id="robeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#4B0082;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#8A2BE2;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          <rect width="100" height="180" fill="#0f0a1e" />
-          <rect x="35" y="50" width="30" height="100" fill="url(#robeGradient)" />
-          <circle cx="50" cy="40" r="15" fill="#FFD700" />
-          <path d="M20 150 Q50 130 80 150" fill="none" stroke="#FFD700" stroke-width="2" />
-          <circle cx="30" cy="60" r="3" fill="#FFD700" />
-          <circle cx="70" cy="60" r="3" fill="#FFD700" />
-          <path d="M40 20 L60 20" stroke="#FFD700" stroke-width="2" />
-          <path d="M35 25 L65 25" stroke="#FFD700" stroke-width="2" />
-          <path d="M30 30 L70 30" stroke="#FFD700" stroke-width="2" />
+          <rect width="100" height="180" fill="#f0e68c" />
+          <path d="M30 40 L50 20 L70 40 L70 160 L30 160 Z" fill="#800080" />
+          <circle cx="50" cy="60" r="15" fill="#fff" />
+          <path d="M40 100 L60 100" stroke="#ffd700" stroke-width="2" />
+          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">V</text>
         </svg>`
       }
     ];
@@ -585,7 +612,7 @@
           </div>
           <div class="card-back">
             ${card.svg}
-            <div class="card-name">${card.name}</div>
+            <div class="card-name">${translations[currentLanguage].cardNames[card.name]}</div>
           </div>
         </div>
       `;
@@ -637,64 +664,63 @@
     function displayReadings(cards) {
       const readings = document.getElementById('readings');
       readings.innerHTML = '';
-      let prediction = "The mystical energies reveal that ";
+      let prediction = translations[currentLanguage].prediction;
 
       cards.forEach((card, index) => {
         const readingElement = document.createElement('div');
         readingElement.className = 'reading';
         readingElement.innerHTML = `
-          <h3>${card.name}</h3>
-          <p>${card.meaning}</p>
+          <h3>${translations[currentLanguage].cardNames[card.name]}</h3>
+          <p>${card.meaning[currentLanguage]}</p>
         `;
         readings.appendChild(readingElement);
         createSparkles(readingElement);
 
-        switch (index) {
-          case 0:
-            prediction += `the enchanted essence of ${card.name.toLowerCase()} whispers that `;
-            break;
-          case 1:
-            prediction += `intertwined with the magic of ${card.name.toLowerCase()}, it foretells that `;
-            break;
-          case 2:
-            prediction += `and the arcane wisdom of ${card.name.toLowerCase()} concludes that `;
-            break;
-          case 3:
-            prediction += `furthermore, the mystical aura of ${card.name.toLowerCase()} suggests that `;
-            break;
-          case 4:
-            prediction += `lastly, the ethereal energies of ${card.name.toLowerCase()} reveal that `;
-            break;
-        }
-
-        prediction += generatePrediction(card.name);
+        prediction += generatePrediction(card.name, index);
       });
 
       const predictionElement = document.createElement('div');
       predictionElement.className = 'reading';
       predictionElement.innerHTML = `
-        <h3>Your Mystical Prediction</h3>
+        <h3>${translations[currentLanguage].historyTitle}</h3>
         <p>${prediction}</p>
       `;
       readings.appendChild(predictionElement);
       createSparkles(predictionElement);
     }
 
-    function generatePrediction(cardName) {
+    function generatePrediction(cardName, index) {
       const predictions = {
-        "The Enchanted Sun": "a radiant spell of joy and success will illuminate your path. Embrace the magical warmth that surrounds you.",
-        "The Mystic Moon": "your inner cauldron of wisdom will guide you through the shadows of uncertainty.",
-        "The Cosmic Star": "celestial energies are aligning to manifest your deepest desires. Keep your wand pointed towards your dreams.",
-        "The Enchanted Lovers": "a bewitching harmony in your relationships will bring forth great magical fulfillment.",
-        "The Arcane Magician": "you possess all the mystical ingredients to brew success. It's time to wave your wand and take inspired action."
+        en: [
+          `the essence of ${translations[currentLanguage].cardNames[cardName]} suggests that `,
+          `intertwined with the energy of ${translations[currentLanguage].cardNames[cardName]}, it foretells that `,
+          `and the wisdom of ${translations[currentLanguage].cardNames[cardName]} concludes that `,
+          `furthermore, the influence of ${translations[currentLanguage].cardNames[cardName]} indicates that `,
+          `lastly, the power of ${translations[currentLanguage].cardNames[cardName]} reveals that `
+        ],
+        fr: [
+          `l'essence de ${translations[currentLanguage].cardNames[cardName]} suggère que `,
+          `entrelacée avec l'énergie de ${translations[currentLanguage].cardNames[cardName]}, elle prédit que `,
+          `et la sagesse de ${translations[currentLanguage].cardNames[cardName]} conclut que `,
+          `de plus, l'influence de ${translations[currentLanguage].cardNames[cardName]} indique que `,
+          `enfin, le pouvoir de ${translations[currentLanguage].cardNames[cardName]} révèle que `
+        ],
+        es: [
+          `la esencia de ${translations[currentLanguage].cardNames[cardName]} sugiere que `,
+          `entrelazada con la energía de ${translations[currentLanguage].cardNames[cardName]}, predice que `,
+          `y la sabiduría de ${translations[currentLanguage].cardNames[cardName]} concluye que `,
+          `además, la influencia de ${translations[currentLanguage].cardNames[cardName]} indica que `,
+          `por último, el poder de ${translations[currentLanguage].cardNames[cardName]} revela que `
+        ]
       };
-      return predictions[cardName];
+
+      return predictions[currentLanguage][index] || '';
     }
 
     function addToHistory(cards) {
       const historyList = document.getElementById('historyList');
       const listItem = document.createElement('li');
-      listItem.textContent = cards.map(card => card.name).join(', ');
+      listItem.textContent = cards.map(card => translations[currentLanguage].cardNames[card.name]).join(', ');
       historyList.insertBefore(listItem, historyList.firstChild);
       createSparkles(listItem);
     }
@@ -732,7 +758,38 @@
       const historyList = document.getElementById('historyList');
       historyList.classList.toggle('collapsed');
       const historyHeader = document.querySelector('#history h3');
-      historyHeader.textContent = historyList.classList.contains('collapsed') ? 'Reading History ▼' : 'Reading History ▲';
+      historyHeader.textContent = historyList.classList.contains('collapsed') ? `${translations[currentLanguage].historyTitle} ▼` : `${translations[currentLanguage].historyTitle} ▲`;
+    }
+
+    function changeLanguage() {
+      currentLanguage = document.getElementById('languageSelector').value;
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      document.getElementById('title').textContent = translations[currentLanguage].title;
+      document.getElementById('draw1').textContent = translations[currentLanguage].draw1;
+      document.getElementById('draw3').textContent = translations[currentLanguage].draw3;
+      document.getElementById('draw5').textContent = translations[currentLanguage].draw5;
+      document.getElementById('historyTitle').textContent = `${translations[currentLanguage].historyTitle} ▼`;
+      
+      const cards = document.querySelectorAll('.card-name');
+      cards.forEach(card => {
+        const originalName = Object.keys(translations.en.cardNames).find(key => translations.en.cardNames[key] === card.textContent);
+        card.textContent = translations[currentLanguage].cardNames[originalName];
+      });
+
+      const readings = document.querySelectorAll('.reading h3');
+      readings.forEach(reading => {
+        const originalName = Object.keys(translations.en.cardNames).find(key => translations.en.cardNames[key] === reading.textContent);
+        if (originalName) {
+          reading.textContent = translations[currentLanguage].cardNames[originalName];
+        }
+      });
+
+      if (currentReading.length > 0) {
+        displayReadings(currentReading);
+      }
     }
 
     // Initial sparkles on the title
