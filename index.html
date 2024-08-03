@@ -1,0 +1,742 @@
+<html><head><base href="https://websim.io/midnight-tarot/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Midnight Seer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+  :root {
+    --primary-color: #3d1c56;
+    --secondary-color: #ff69b4;
+    --background-color: #0f0a1e;
+    --text-color: #e6e0ff;
+    --card-color: #2a1340;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(61, 28, 86, 0.4) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(255, 105, 180, 0.2) 0%, transparent 30%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text-color);
+    overflow-x: hidden;
+  }
+
+  .tarot-container {
+    background: rgba(42, 19, 64, 0.6);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 40px;
+    text-align: center;
+    max-width: 800px;
+    width: 90%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tarot-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 80%);
+    transform: rotate(45deg);
+    pointer-events: none;
+    animation: shimmer 10s infinite linear;
+  }
+
+  @keyframes shimmer {
+    0% { transform: rotate(45deg) translateY(0%); }
+    100% { transform: rotate(45deg) translateY(100%); }
+  }
+
+  .header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  h1, h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 6px;
+  }
+
+  h1 {
+    font-size: 48px;
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(45deg, #ff69b4, #9370db, #ff69b4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: titleGradient 10s ease infinite, titleFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes titleGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes titleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  h2 {
+    font-size: 28px;
+    margin-top: 40px;
+  }
+
+  .cards-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .card {
+    width: 120px;
+    height: 200px;
+    background-color: var(--card-color);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    perspective: 1000px;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    transform: rotate(45deg);
+    pointer-events: none;
+    animation: cardShimmer 3s infinite linear;
+  }
+
+  @keyframes cardShimmer {
+    0% { transform: rotate(45deg) translateY(0%); }
+    100% { transform: rotate(45deg) translateY(100%); }
+  }
+
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card-front {
+    background: linear-gradient(135deg, var(--primary-color), var(--card-color));
+    border: 2px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .card-back {
+    background: linear-gradient(135deg, #ff69b4, #9370db);
+    border: 2px solid var(--secondary-color);
+    transform: rotateY(180deg);
+  }
+
+  .card-back svg {
+    width: 80%;
+    height: 80%;
+  }
+
+  .card-name {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: var(--text-color);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+
+  #readings {
+    font-size: 18px;
+    color: var(--text-color);
+    margin-top: 30px;
+  }
+
+  .reading {
+    background: rgba(255, 105, 180, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease forwards;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .reading h3 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    font-family: 'Cinzel', serif;
+  }
+
+  button {
+    background: linear-gradient(45deg, var(--primary-color), #9370db);
+    border: none;
+    color: var(--text-color);
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: rotate(45deg);
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  button:hover::before {
+    left: 0;
+  }
+
+  button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  #midnightSeerCard {
+    width: 120px;
+    height: 200px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, var(--primary-color), var(--card-color));
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    position: relative;
+    animation: cardFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes cardFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+  }
+
+  #midnightSeerCard::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    transform: rotate(45deg);
+    pointer-events: none;
+    animation: cardShimmer 3s infinite linear;
+  }
+
+  #midnightSeerCard:hover {
+    transform: scale(1.05);
+  }
+
+  #history {
+    margin-top: 40px;
+    padding: 20px;
+    background: rgba(255, 105, 180, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  #history h3 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
+
+  #historyList {
+    list-style-type: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    transition: max-height 0.3s ease;
+  }
+
+  #historyList.collapsed {
+    max-height: 0;
+  }
+
+  #historyList li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: rgba(255, 105, 180, 0.2);
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: fadeInLeft 0.5s ease forwards;
+  }
+
+  #homeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s ease;
+  }
+
+  #homeButton:hover {
+    transform: scale(1.1);
+  }
+
+  #homeButton svg {
+    width: 40px;
+    height: 40px;
+    fill: var(--secondary-color);
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInLeft {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .sparkle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    animation: sparkle 1.5s ease-in-out infinite;
+  }
+
+  @keyframes sparkle {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
+  }
+
+  footer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-color);
+    opacity: 0.7;
+  }
+
+  footer a {
+    color: var(--secondary-color);
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+  <div class="tarot-container">
+    <button id="homeButton" onclick="goHome()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+    </button>
+    <div class="header">
+      <h1>The Midnight Seer</h1>
+    </div>
+    <div id="midnightSeerCard">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" width="100%" height="100%">
+        <defs>
+          <pattern id="starryPattern" patternUnits="userSpaceOnUse" width="50" height="50">
+            <circle cx="25" cy="25" r="1" fill="#ff69b4" />
+            <circle cx="10" cy="10" r="0.5" fill="#ff69b4" />
+            <circle cx="40" cy="40" r="0.7" fill="#ff69b4" />
+            <circle cx="5" cy="45" r="0.4" fill="#ff69b4" />
+            <circle cx="35" cy="5" r="0.6" fill="#ff69b4" />
+          </pattern>
+        </defs>
+        <rect width="120" height="200" fill="url(#starryPattern)" />
+        <circle cx="60" cy="100" r="40" fill="#2a1340" />
+        <path d="M60 60 Q100 100 60 140 Q20 100 60 60" fill="#9370db" />
+      </svg>
+    </div>
+    <div id="drawOptions">
+      <button onclick="drawCards(1)">Draw 1 Card</button>
+      <button onclick="drawCards(3)">Draw 3 Cards</button>
+      <button onclick="drawCards(5)">Draw 5 Cards</button>
+    </div>
+    <div class="cards-container" id="cardsContainer"></div>
+    <div id="readings"></div>
+    <div id="history">
+      <h3 onclick="toggleHistory()">Reading History ▼</h3>
+      <ul id="historyList"></ul>
+    </div>
+    <footer>Created with ✨ by <a href="https://github.com/HylianSyrup" target="_blank">HylianSyrup</a></footer>
+  </div>
+
+  <script>
+    const tarotCards = [
+      {
+        name: "The Enchanted Sun",
+        meaning: "A magical radiance illuminates your path, bringing joy and success. Embrace the mystical warmth in your life.",
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
+          <defs>
+            <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+            </radialGradient>
+          </defs>
+          <rect width="100" height="180" fill="#3d1c56" />
+          <circle cx="50" cy="60" r="30" fill="url(#sunGradient)" />
+          <g stroke="#FFD700" stroke-width="2" fill="none">
+            <path d="M50 20 L50 10" />
+            <path d="M50 100 L50 110" />
+            <path d="M20 60 L10 60" />
+            <path d="M90 60 L80 60" />
+            <path d="M26 36 L19 29" />
+            <path d="M74 84 L81 91" />
+            <path d="M74 36 L81 29" />
+            <path d="M26 84 L19 91" />
+          </g>
+          <path d="M30 120 Q50 140 70 120 T110 120" stroke="#FFD700" stroke-width="2" fill="none" />
+          <path d="M30 140 Q50 160 70 140 T110 140" stroke="#FFD700" stroke-width="2" fill="none" />
+          <path d="M30 160 Q50 180 70 160 T110 160" stroke="#FFD700" stroke-width="2" fill="none" />
+        </svg>`
+      },
+      {
+        name: "The Mystic Moon",
+        meaning: "Your inner wisdom is heightened. Navigate through the shadows by trusting your magical intuition.",
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
+          <defs>
+            <radialGradient id="moonGradient" cx="70%" cy="70%" r="50%" fx="70%" fy="70%">
+              <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#C0C0C0;stop-opacity:1" />
+            </radialGradient>
+          </defs>
+          <rect width="100" height="180" fill="#0f0a1e" />
+          <path d="M30,60 a1,1 0 0,0 40,0 a1,1 0 0,1 -20,0 a1,1 0 0,1 -20,0" fill="url(#moonGradient)" />
+          <circle cx="25" cy="45" r="2" fill="#FFFFFF" />
+          <circle cx="40" cy="30" r="1.5" fill="#FFFFFF" />
+          <circle cx="60" cy="20" r="1" fill="#FFFFFF" />
+          <circle cx="75" cy="40" r="1.2" fill="#FFFFFF" />
+          <circle cx="20" cy="70" r="1.3" fill="#FFFFFF" />
+          <path d="M20 100 Q50 120 80 100" stroke="#C0C0C0" stroke-width="1" fill="none" />
+          <path d="M30 130 Q50 150 70 130" stroke="#C0C0C0" stroke-width="1" fill="none" />
+          <path d="M40 160 Q50 170 60 160" stroke="#C0C0C0" stroke-width="1" fill="none" />
+        </svg>`
+      },
+      {
+        name: "The Cosmic Star",
+        meaning: "Celestial energies guide your aspirations. Believe in your magical potential and your dreams will manifest.",
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
+          <defs>
+            <radialGradient id="starGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#FFFACD;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#FFD700;stop-opacity:1" />
+            </radialGradient>
+          </defs>
+          <rect width="100" height="180" fill="#191970" />
+          <polygon points="50,20 61,50 93,50 67,70 77,100 50,80 23,100 33,70 7,50 39,50" fill="url(#starGradient)" />
+          <circle cx="20" cy="30" r="1" fill="#FFFFFF" />
+          <circle cx="80" cy="40" r="1.2" fill="#FFFFFF" />
+          <circle cx="35" cy="120" r="0.8" fill="#FFFFFF" />
+          <circle cx="70" cy="140" r="1.1" fill="#FFFFFF" />
+          <circle cx="15" cy="160" r="0.9" fill="#FFFFFF" />
+          <path d="M10 110 Q50 130 90 110" stroke="#FFD700" stroke-width="1" fill="none" />
+          <path d="M20 150 Q50 170 80 150" stroke="#FFD700" stroke-width="1" fill="none" />
+        </svg>`
+      },
+      {
+        name: "The Enchanted Lovers",
+        meaning: "Magical connections are highlighted. Make choices with your heart and nurture the spellbinding bonds in your life.",
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
+          <defs>
+            <radialGradient id="heartGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+              <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#FF1493;stop-opacity:1" />
+            </radialGradient>
+          </defs>
+          <rect width="100" height="180" fill="#4B0082" />
+          <path d="M30,50 Q50,80 70,50 T90,20 Q70,0 50,20 T10,20 Q30,0 50,20" fill="url(#heartGradient)" />
+          <circle cx="35" cy="40" r="5" fill="#FFD700" />
+          <circle cx="65" cy="40" r="5" fill="#FFD700" />
+          <path d="M40 60 Q50 70 60 60" fill="none" stroke="#FFD700" stroke-width="2" />
+          <path d="M20 100 Q50 120 80 100" stroke="#FF69B4" stroke-width="1" fill="none" />
+          <path d="M30 130 Q50 150 70 130" stroke="#FF69B4" stroke-width="1" fill="none" />
+          <path d="M40 160 Q50 170 60 160" stroke="#FF69B4" stroke-width="1" fill="none" />
+        </svg>`
+      },
+      {
+        name: "The Arcane Magician",
+        meaning: "You possess mystical tools to manifest your desires. Harness your magical abilities and believe in your enchanted potential.",
+        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
+          <defs>
+            <linearGradient id="robeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#4B0082;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#8A2BE2;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <rect width="100" height="180" fill="#0f0a1e" />
+          <rect x="35" y="50" width="30" height="100" fill="url(#robeGradient)" />
+          <circle cx="50" cy="40" r="15" fill="#FFD700" />
+          <path d="M20 150 Q50 130 80 150" fill="none" stroke="#FFD700" stroke-width="2" />
+          <circle cx="30" cy="60" r="3" fill="#FFD700" />
+          <circle cx="70" cy="60" r="3" fill="#FFD700" />
+          <path d="M40 20 L60 20" stroke="#FFD700" stroke-width="2" />
+          <path d="M35 25 L65 25" stroke="#FFD700" stroke-width="2" />
+          <path d="M30 30 L70 30" stroke="#FFD700" stroke-width="2" />
+        </svg>`
+      }
+    ];
+
+    let currentReading = [];
+
+    function createCardElement(card) {
+      const cardElement = document.createElement('div');
+      cardElement.className = 'card';
+      cardElement.innerHTML = `
+        <div class="card-inner">
+          <div class="card-front">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
+              <rect width="100" height="180" fill="#3d1c56" />
+              <circle cx="50" cy="90" r="30" fill="#2a1340" stroke="#ff69b4" stroke-width="2" />
+              <path d="M30 40 Q50 20 70 40 T110 40" stroke="#ff69b4" stroke-width="2" fill="none" />
+              <path d="M30 140 Q50 160 70 140 T110 140" stroke="#ff69b4" stroke-width="2" fill="none" />
+              <circle cx="30" cy="30" r="2" fill="#ff69b4" />
+              <circle cx="70" cy="30" r="2" fill="#ff69b4" />
+              <circle cx="30" cy="150" r="2" fill="#ff69b4" />
+              <circle cx="70" cy="150" r="2" fill="#ff69b4" />
+            </svg>
+          </div>
+          <div class="card-back">
+            ${card.svg}
+            <div class="card-name">${card.name}</div>
+          </div>
+        </div>
+      `;
+      return cardElement;
+    }
+
+    function drawCards(numCards) {
+      const cardsContainer = document.getElementById('cardsContainer');
+      const readings = document.getElementById('readings');
+      const midnightSeerCard = document.getElementById('midnightSeerCard');
+      const drawOptions = document.getElementById('drawOptions');
+      cardsContainer.innerHTML = '';
+      readings.innerHTML = '';
+      midnightSeerCard.style.display = 'none';
+      drawOptions.style.display = 'none';
+
+      currentReading = [];
+      const availableCards = [...tarotCards];
+
+      for (let i = 0; i < numCards; i++) {
+        const randomIndex = Math.floor(Math.random() * availableCards.length);
+        const randomCard = availableCards.splice(randomIndex, 1)[0];
+        currentReading.push(randomCard);
+      }
+
+      displayCards();
+      addToHistory(currentReading);
+    }
+
+    function displayCards() {
+      const cardsContainer = document.getElementById('cardsContainer');
+      cardsContainer.innerHTML = '';
+      
+      currentReading.forEach((card, index) => {
+        const cardElement = createCardElement(card);
+        cardsContainer.appendChild(cardElement);
+        
+        setTimeout(() => {
+          cardElement.classList.add('flipped');
+          createSparkles(cardElement);
+        }, index * 700);
+      });
+
+      setTimeout(() => {
+        displayReadings(currentReading);
+      }, currentReading.length * 700);
+    }
+
+    function displayReadings(cards) {
+      const readings = document.getElementById('readings');
+      readings.innerHTML = '';
+      let prediction = "The mystical energies reveal that ";
+
+      cards.forEach((card, index) => {
+        const readingElement = document.createElement('div');
+        readingElement.className = 'reading';
+        readingElement.innerHTML = `
+          <h3>${card.name}</h3>
+          <p>${card.meaning}</p>
+        `;
+        readings.appendChild(readingElement);
+        createSparkles(readingElement);
+
+        switch (index) {
+          case 0:
+            prediction += `the enchanted essence of ${card.name.toLowerCase()} whispers that `;
+            break;
+          case 1:
+            prediction += `intertwined with the magic of ${card.name.toLowerCase()}, it foretells that `;
+            break;
+          case 2:
+            prediction += `and the arcane wisdom of ${card.name.toLowerCase()} concludes that `;
+            break;
+          case 3:
+            prediction += `furthermore, the mystical aura of ${card.name.toLowerCase()} suggests that `;
+            break;
+          case 4:
+            prediction += `lastly, the ethereal energies of ${card.name.toLowerCase()} reveal that `;
+            break;
+        }
+
+        prediction += generatePrediction(card.name);
+      });
+
+      const predictionElement = document.createElement('div');
+      predictionElement.className = 'reading';
+      predictionElement.innerHTML = `
+        <h3>Your Mystical Prediction</h3>
+        <p>${prediction}</p>
+      `;
+      readings.appendChild(predictionElement);
+      createSparkles(predictionElement);
+    }
+
+    function generatePrediction(cardName) {
+      const predictions = {
+        "The Enchanted Sun": "a radiant spell of joy and success will illuminate your path. Embrace the magical warmth that surrounds you.",
+        "The Mystic Moon": "your inner cauldron of wisdom will guide you through the shadows of uncertainty.",
+        "The Cosmic Star": "celestial energies are aligning to manifest your deepest desires. Keep your wand pointed towards your dreams.",
+        "The Enchanted Lovers": "a bewitching harmony in your relationships will bring forth great magical fulfillment.",
+        "The Arcane Magician": "you possess all the mystical ingredients to brew success. It's time to wave your wand and take inspired action."
+      };
+      return predictions[cardName];
+    }
+
+    function addToHistory(cards) {
+      const historyList = document.getElementById('historyList');
+      const listItem = document.createElement('li');
+      listItem.textContent = cards.map(card => card.name).join(', ');
+      historyList.insertBefore(listItem, historyList.firstChild);
+      createSparkles(listItem);
+    }
+
+    function goHome() {
+      const midnightSeerCard = document.getElementById('midnightSeerCard');
+      const drawOptions = document.getElementById('drawOptions');
+      const cardsContainer = document.getElementById('cardsContainer');
+      const readings = document.getElementById('readings');
+
+      midnightSeerCard.style.display = 'block';
+      drawOptions.style.display = 'block';
+      cardsContainer.innerHTML = '';
+      readings.innerHTML = '';
+
+      createSparkles(document.querySelector('.header'));
+    }
+
+    function createSparkles(element) {
+      for (let i = 0; i < 10; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = `${Math.random() * 100}%`;
+        sparkle.style.top = `${Math.random() * 100}%`;
+        sparkle.style.animationDelay = `${Math.random() * 1.5}s`;
+        element.appendChild(sparkle);
+
+        setTimeout(() => {
+          sparkle.remove();
+        }, 1500);
+      }
+    }
+
+    function toggleHistory() {
+      const historyList = document.getElementById('historyList');
+      historyList.classList.toggle('collapsed');
+      const historyHeader = document.querySelector('#history h3');
+      historyHeader.textContent = historyList.classList.contains('collapsed') ? 'Reading History ▼' : 'Reading History ▲';
+    }
+
+    // Initial sparkles on the title
+    createSparkles(document.querySelector('.header'));
+  </script>
+</body>
+</html>
