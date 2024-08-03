@@ -194,31 +194,6 @@
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
   }
 
-  #readings {
-    font-size: 18px;
-    color: var(--text-color);
-    margin-top: 30px;
-  }
-
-  .reading {
-    background: rgba(255, 105, 180, 0.1);
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.5s ease forwards;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .reading h3 {
-    color: var(--secondary-color);
-    margin-bottom: 15px;
-    font-family: 'Cinzel', serif;
-  }
-
   button {
     background: linear-gradient(45deg, var(--primary-color), #9370db);
     border: none;
@@ -301,43 +276,6 @@
     transform: scale(1.05);
   }
 
-  #history {
-    margin-top: 40px;
-    padding: 20px;
-    background: rgba(255, 105, 180, 0.1);
-    border-radius: 15px;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  #history h3 {
-    color: var(--secondary-color);
-    margin-bottom: 15px;
-    cursor: pointer;
-  }
-
-  #historyList {
-    list-style-type: none;
-    padding: 0;
-    max-height: 200px;
-    overflow-y: auto;
-    transition: max-height 0.3s ease;
-  }
-
-  #historyList.collapsed {
-    max-height: 0;
-  }
-
-  #historyList li {
-    margin-bottom: 10px;
-    padding: 10px;
-    background: rgba(255, 105, 180, 0.2);
-    border-radius: 10px;
-    opacity: 0;
-    transform: translateX(-20px);
-    animation: fadeInLeft 0.5s ease forwards;
-  }
-
   #homeButton {
     background: none;
     border: none;
@@ -366,17 +304,18 @@
     cursor: pointer;
   }
 
+  #languageSelector option {
+    background-color: var(--background-color);
+  }
+
+  #languageSelector option:not(:checked) {
+    color: #888;
+  }
+
   @keyframes fadeInUp {
     to {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
-
-  @keyframes fadeInLeft {
-    to {
-      opacity: 1;
-      transform: translateX(0);
     }
   }
 
@@ -416,6 +355,28 @@
   footer a:hover {
     text-decoration: underline;
   }
+
+  .card-explanation {
+    background: rgba(42, 19, 64, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-explanation h3 {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+  }
+
+  .card-explanation p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+  }
 </style>
 </head>
 <body>
@@ -430,6 +391,8 @@
         <option value="en">English</option>
         <option value="fr">Français</option>
         <option value="es">Español</option>
+        <option value="it">Italiano</option>
+        <option value="pt">Português</option>
       </select>
     </div>
     <h1 id="title">The Midnight Cards</h1>
@@ -455,11 +418,7 @@
       <button onclick="drawCards(5)" id="draw5">Draw 5 Cards</button>
     </div>
     <div class="cards-container" id="cardsContainer"></div>
-    <div id="readings"></div>
-    <div id="history">
-      <h3 onclick="toggleHistory()" id="historyTitle">Reading History ▼</h3>
-      <ul id="historyList"></ul>
-    </div>
+    <div id="cardExplanations"></div>
     <footer>Created with ✨ by <a href="https://github.com/HylianSyrup" target="_blank">HylianSyrup</a></footer>
   </div>
 
@@ -470,45 +429,70 @@
         draw1: "Draw 1 Card",
         draw3: "Draw 3 Cards",
         draw5: "Draw 5 Cards",
-        historyTitle: "Reading History",
-        prediction: "The mystical energies reveal that ",
         cardNames: {
           "Le Bateleur": "The Magician",
           "La Papesse": "The High Priestess",
           "L'Impératrice": "The Empress",
           "L'Empereur": "The Emperor",
           "Le Pape": "The Hierophant"
-        }
+        },
+        explanation: "Explanation"
       },
       fr: {
         title: "Les Cartes de Minuit",
         draw1: "Tirer 1 Carte",
         draw3: "Tirer 3 Cartes",
         draw5: "Tirer 5 Cartes",
-        historyTitle: "Historique des Tirages",
-        prediction: "Les énergies mystiques révèlent que ",
         cardNames: {
           "Le Bateleur": "Le Bateleur",
           "La Papesse": "La Papesse",
           "L'Impératrice": "L'Impératrice",
           "L'Empereur": "L'Empereur",
           "Le Pape": "Le Pape"
-        }
+        },
+        explanation: "Explication"
       },
       es: {
         title: "Las Cartas de Medianoche",
         draw1: "Sacar 1 Carta",
         draw3: "Sacar 3 Cartas",
         draw5: "Sacar 5 Cartas",
-        historyTitle: "Historial de Lecturas",
-        prediction: "Las energías místicas revelan que ",
         cardNames: {
           "Le Bateleur": "El Mago",
           "La Papesse": "La Sacerdotisa",
           "L'Impératrice": "La Emperatriz",
           "L'Empereur": "El Emperador",
           "Le Pape": "El Sumo Sacerdote"
-        }
+        },
+        explanation: "Explicación"
+      },
+      it: {
+        title: "Le Carte di Mezzanotte",
+        draw1: "Pesca 1 Carta",
+        draw3: "Pesca 3 Carte",
+        draw5: "Pesca 5 Carte",
+        cardNames: {
+          "Le Bateleur": "Il Mago",
+          "La Papesse": "La Papessa",
+          "L'Impératrice": "L'Imperatrice",
+          "L'Empereur": "L'Imperatore",
+          "Le Pape": "Il Papa"
+        },
+        explanation: "Spiegazione"
+      },
+      pt: {
+        title: "As Cartas da Meia-Noite",
+        draw1: "Tirar 1 Carta",
+        draw3: "Tirar 3 Cartas",
+        draw5: "Tirar 5 Cartas",
+        cardNames: {
+          "Le Bateleur": "O Mago",
+          "La Papesse": "A Sacerdotisa",
+          "L'Impératrice": "A Imperatriz",
+          "L'Empereur": "O Imperador",
+          "Le Pape": "O Papa"
+        },
+        explanation: "Explicação"
       }
     };
 
@@ -520,7 +504,9 @@
         meaning: {
           en: "Skill, diplomacy, address, subtlety; sickness, pain, loss, disaster, snares of enemies; self-confidence, will; the Querent, if male.",
           fr: "Habileté, diplomatie, adresse, subtilité ; maladie, douleur, perte, désastre, pièges des ennemis ; confiance en soi, volonté ; le Consultant, si masculin.",
-          es: "Habilidad, diplomacia, dirección, sutileza; enfermedad, dolor, pérdida, desastre, trampas de enemigos; confianza en sí mismo, voluntad; el Consultante, si es hombre."
+          es: "Habilidad, diplomacia, dirección, sutileza; enfermedad, dolor, pérdida, desastre, trampas de enemigos; confianza en sí mismo, voluntad; el Consultante, si es hombre.",
+          it: "Abilità, diplomazia, indirizzo, sottigliezza; malattia, dolore, perdita, disastro, trappole dei nemici; fiducia in sé stessi, volontà; il Consultante, se maschio.",
+          pt: "Habilidade, diplomacia, direção, sutileza; doença, dor, perda, desastre, armadilhas de inimigos; autoconfiança, vontade; o Consulente, se for homem."
         },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
           <rect width="100" height="180" fill="#f0e68c" />
@@ -535,7 +521,9 @@
         meaning: {
           en: "Secrets, mystery, the future as yet unrevealed; the woman who interests the Querent, if male; the Querent herself, if female; silence, tenacity; mystery, wisdom, science.",
           fr: "Secrets, mystère, l'avenir encore non révélé ; la femme qui intéresse le Consultant, si masculin ; la Consultante elle-même, si féminine ; silence, ténacité ; mystère, sagesse, science.",
-          es: "Secretos, misterio, el futuro aún no revelado; la mujer que interesa al Consultante, si es hombre; la Consultante misma, si es mujer; silencio, tenacidad; misterio, sabiduría, ciencia."
+          es: "Secretos, misterio, el futuro aún no revelado; la mujer que interesa al Consultante, si es hombre; la Consultante misma, si es mujer; silencio, tenacidad; misterio, sabiduría, ciencia.",
+          it: "Segreti, mistero, il futuro ancora non rivelato; la donna che interessa il Consultante, se maschio; la Consultante stessa, se femmina; silenzio, tenacia; mistero, saggezza, scienza.",
+          pt: "Segredos, mistério, o futuro ainda não revelado; a mulher que interessa ao Consulente, se for homem; a própria Consulente, se for mulher; silêncio, tenacidade; mistério, sabedoria, ciência."
         },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
           <rect width="100" height="180" fill="#f0e68c" />
@@ -545,11 +533,13 @@
         </svg>`
       },
       {
-        name: "L'Impératrice",
+        name: "L'Impératrice", 
         meaning: {
           en: "Fruitfulness, action, initiative, length of days; the unknown, clandestine; also difficulty, doubt, ignorance.",
-          fr: "Fécondité, action, initiative, longévité ; l'inconnu, le clandestin ; aussi difficulté, doute, ignorance.",
-          es: "Fecundidad, acción, iniciativa, longevidad; lo desconocido, lo clandestino; también dificultad, duda, ignorancia."
+          fr: "Fécondité, action, initiative, longévité ; l'inconnu, le clandestin ; aussi difficulté, doute, ignorance.", 
+          es: "Fecundidad, acción, iniciativa, longevidad; lo desconocido, lo clandestino; también dificultad, duda, ignorancia.",
+          it: "Fecondità, azione, iniziativa, longevità; l'ignoto, il clandestino; anche difficoltà, dubbio, ignoranza.",
+          pt: "Fecundidade, ação, iniciativa, longevidade; o desconhecido, o clandestino; também dificuldade, dúvida, ignorância."
         },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
           <rect width="100" height="180" fill="#f0e68c" />
@@ -564,7 +554,9 @@
         meaning: {
           en: "Stability, power, protection, realization; a great person; aid, reason, conviction; also authority and will.",
           fr: "Stabilité, pouvoir, protection, réalisation ; une grande personne ; aide, raison, conviction ; aussi autorité et volonté.",
-          es: "Estabilidad, poder, protección, realización; una gran persona; ayuda, razón, convicción; también autoridad y voluntad."
+          es: "Estabilidad, poder, protección, realización; una gran persona; ayuda, razón, convicción; también autoridad y voluntad.",
+          it: "Stabilità, potere, protezione, realizzazione; una grande persona; aiuto, ragione, convinzione; anche autorità e volontà.",
+          pt: "Estabilidade, poder, proteção, realização; uma grande pessoa; ajuda, razão, convicção; também autoridade e vontade."
         },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
           <rect width="100" height="180" fill="#f0e68c" />
@@ -578,8 +570,10 @@
         name: "Le Pape",
         meaning: {
           en: "Marriage, alliance, captivity, servitude; by another account, mercy and goodness; inspiration; the man to whom the Querent has recourse.",
-          fr: "Mariage, alliance, captivité, servitude ; selon un autre compte, miséricorde et bonté ; inspiration ; l'homme auquel le Consultant a recours.",
-          es: "Matrimonio, alianza, cautiverio, servidumbre; según otra cuenta, misericordia y bondad; inspiración; el hombre al que recurre el Consultante."
+          fr: "Mariage, alliance, captivité, servitude ; selon un autre compte, miséricorde et bonté ; inspiration ; l'homme auquel le Consultant a recours.", 
+          es: "Matrimonio, alianza, cautiverio, servidumbre; según otra cuenta, misericordia y bondad; inspiración; el hombre al que recurre el Consultante.",
+          it: "Matrimonio, alleanza, prigionia, servitù; secondo un altro conto, misericordia e bontà; ispirazione; l'uomo a cui il Consultante fa ricorso.",
+          pt: "Casamento, aliança, cativeiro, servidão; segundo outra conta, misericórdia e bondade; inspiração; o homem a quem o Consulente recorre."
         },
         svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
           <rect width="100" height="180" fill="#f0e68c" />
@@ -621,11 +615,9 @@
 
     function drawCards(numCards) {
       const cardsContainer = document.getElementById('cardsContainer');
-      const readings = document.getElementById('readings');
       const midnightSeerCard = document.getElementById('midnightSeerCard');
       const drawOptions = document.getElementById('drawOptions');
       cardsContainer.innerHTML = '';
-      readings.innerHTML = '';
       midnightSeerCard.style.display = 'none';
       drawOptions.style.display = 'none';
 
@@ -639,7 +631,7 @@
       }
 
       displayCards();
-      addToHistory(currentReading);
+      explainCards();
     }
 
     function displayCards() {
@@ -655,145 +647,59 @@
           createSparkles(cardElement);
         }, index * 700);
       });
-
-      setTimeout(() => {
-        displayReadings(currentReading);
-      }, currentReading.length * 700);
     }
 
-    function displayReadings(cards) {
-      const readings = document.getElementById('readings');
-      readings.innerHTML = '';
-      let prediction = translations[currentLanguage].prediction;
+    function explainCards() {
+      const explanationContainer = document.getElementById('cardExplanations');
+      explanationContainer.innerHTML = '';
 
-      cards.forEach((card, index) => {
-        const readingElement = document.createElement('div');
-        readingElement.className = 'reading';
-        readingElement.innerHTML = `
+      currentReading.forEach((card, index) => {
+        const explanation = document.createElement('div');
+        explanation.className = 'card-explanation';
+        explanation.innerHTML = `
           <h3>${translations[currentLanguage].cardNames[card.name]}</h3>
-          <p>${card.meaning[currentLanguage]}</p>
+          <p>${translations[currentLanguage].explanation}: ${card.meaning[currentLanguage]}</p>
         `;
-        readings.appendChild(readingElement);
-        createSparkles(readingElement);
-
-        prediction += generatePrediction(card.name, index);
+        explanationContainer.appendChild(explanation);
       });
-
-      const predictionElement = document.createElement('div');
-      predictionElement.className = 'reading';
-      predictionElement.innerHTML = `
-        <h3>${translations[currentLanguage].historyTitle}</h3>
-        <p>${prediction}</p>
-      `;
-      readings.appendChild(predictionElement);
-      createSparkles(predictionElement);
     }
 
-    function generatePrediction(cardName, index) {
-      const predictions = {
-        en: [
-          `the essence of ${translations[currentLanguage].cardNames[cardName]} suggests that `,
-          `intertwined with the energy of ${translations[currentLanguage].cardNames[cardName]}, it foretells that `,
-          `and the wisdom of ${translations[currentLanguage].cardNames[cardName]} concludes that `,
-          `furthermore, the influence of ${translations[currentLanguage].cardNames[cardName]} indicates that `,
-          `lastly, the power of ${translations[currentLanguage].cardNames[cardName]} reveals that `
-        ],
-        fr: [
-          `l'essence de ${translations[currentLanguage].cardNames[cardName]} suggère que `,
-          `entrelacée avec l'énergie de ${translations[currentLanguage].cardNames[cardName]}, elle prédit que `,
-          `et la sagesse de ${translations[currentLanguage].cardNames[cardName]} conclut que `,
-          `de plus, l'influence de ${translations[currentLanguage].cardNames[cardName]} indique que `,
-          `enfin, le pouvoir de ${translations[currentLanguage].cardNames[cardName]} révèle que `
-        ],
-        es: [
-          `la esencia de ${translations[currentLanguage].cardNames[cardName]} sugiere que `,
-          `entrelazada con la energía de ${translations[currentLanguage].cardNames[cardName]}, predice que `,
-          `y la sabiduría de ${translations[currentLanguage].cardNames[cardName]} concluye que `,
-          `además, la influencia de ${translations[currentLanguage].cardNames[cardName]} indica que `,
-          `por último, el poder de ${translations[currentLanguage].cardNames[cardName]} revela que `
-        ]
-      };
+    function changeLanguage() {
+      currentLanguage = document.getElementById('languageSelector').value;
+      document.getElementById('title').textContent = translations[currentLanguage].title;
+      document.getElementById('draw1').textContent = translations[currentLanguage].draw1;
+      document.getElementById('draw3').textContent = translations[currentLanguage].draw3;
+      document.getElementById('draw5').textContent = translations[currentLanguage].draw5;
 
-      return predictions[currentLanguage][index] || '';
-    }
-
-    function addToHistory(cards) {
-      const historyList = document.getElementById('historyList');
-      const listItem = document.createElement('li');
-      listItem.textContent = cards.map(card => translations[currentLanguage].cardNames[card.name]).join(', ');
-      historyList.insertBefore(listItem, historyList.firstChild);
-      createSparkles(listItem);
-    }
-
-    function goHome() {
-      const midnightSeerCard = document.getElementById('midnightSeerCard');
-      const drawOptions = document.getElementById('drawOptions');
-      const cardsContainer = document.getElementById('cardsContainer');
-      const readings = document.getElementById('readings');
-
-      midnightSeerCard.style.display = 'block';
-      drawOptions.style.display = 'block';
-      cardsContainer.innerHTML = '';
-      readings.innerHTML = '';
-
-      createSparkles(document.querySelector('.header'));
+      displayCards();
+      explainCards();
     }
 
     function createSparkles(element) {
       for (let i = 0; i < 10; i++) {
         const sparkle = document.createElement('div');
         sparkle.className = 'sparkle';
-        sparkle.style.left = `${Math.random() * 100}%`;
-        sparkle.style.top = `${Math.random() * 100}%`;
+        sparkle.style.left = `${Math.random() * element.offsetWidth}px`;
+        sparkle.style.top = `${Math.random() * element.offsetHeight}px`;
         sparkle.style.animationDelay = `${Math.random() * 1.5}s`;
         element.appendChild(sparkle);
-
-        setTimeout(() => {
-          sparkle.remove();
-        }, 1500);
       }
     }
 
-    function toggleHistory() {
-      const historyList = document.getElementById('historyList');
-      historyList.classList.toggle('collapsed');
-      const historyHeader = document.querySelector('#history h3');
-      historyHeader.textContent = historyList.classList.contains('collapsed') ? `${translations[currentLanguage].historyTitle} ▼` : `${translations[currentLanguage].historyTitle} ▲`;
+    function goHome() {
+      const cardsContainer = document.getElementById('cardsContainer');
+      const midnightSeerCard = document.getElementById('midnightSeerCard');
+      const drawOptions = document.getElementById('drawOptions');
+      const cardExplanations = document.getElementById('cardExplanations');
+
+      cardsContainer.innerHTML = '';
+      cardExplanations.innerHTML = '';
+      midnightSeerCard.style.display = 'block';
+      drawOptions.style.display = 'block';
     }
 
-    function changeLanguage() {
-      currentLanguage = document.getElementById('languageSelector').value;
-      updateLanguage();
-    }
-
-    function updateLanguage() {
-      document.getElementById('title').textContent = translations[currentLanguage].title;
-      document.getElementById('draw1').textContent = translations[currentLanguage].draw1;
-      document.getElementById('draw3').textContent = translations[currentLanguage].draw3;
-      document.getElementById('draw5').textContent = translations[currentLanguage].draw5;
-      document.getElementById('historyTitle').textContent = `${translations[currentLanguage].historyTitle} ▼`;
-      
-      const cards = document.querySelectorAll('.card-name');
-      cards.forEach(card => {
-        const originalName = Object.keys(translations.en.cardNames).find(key => translations.en.cardNames[key] === card.textContent);
-        card.textContent = translations[currentLanguage].cardNames[originalName];
-      });
-
-      const readings = document.querySelectorAll('.reading h3');
-      readings.forEach(reading => {
-        const originalName = Object.keys(translations.en.cardNames).find(key => translations.en.cardNames[key] === reading.textContent);
-        if (originalName) {
-          reading.textContent = translations[currentLanguage].cardNames[originalName];
-        }
-      });
-
-      if (currentReading.length > 0) {
-        displayReadings(currentReading);
-      }
-    }
-
-    // Initial sparkles on the title
-    createSparkles(document.querySelector('.header'));
+    // Initialize
+    changeLanguage();
   </script>
 </body>
 </html>
