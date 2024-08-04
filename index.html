@@ -170,18 +170,16 @@
     align-items: center;
   }
 
-  .card-front {
+  .card-front, .card-back {
     background: linear-gradient(135deg, var(--primary-color), var(--card-color));
     border: 2px solid rgba(255, 255, 255, 0.1);
   }
 
   .card-back {
-    background: linear-gradient(135deg, #ff69b4, #9370db);
-    border: 2px solid var(--secondary-color);
     transform: rotateY(180deg);
   }
 
-  .card-back svg {
+  .card svg {
     width: 80%;
     height: 80%;
   }
@@ -239,41 +237,6 @@
   button:active {
     transform: translateY(-1px);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  }
-
-  #midnightSeerCard {
-    width: 120px;
-    height: 200px;
-    margin: 0 auto 30px;
-    background: linear-gradient(135deg, var(--primary-color), var(--card-color));
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    position: relative;
-    animation: cardFloat 3s ease-in-out infinite;
-  }
-
-  @keyframes cardFloat {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(2deg); }
-  }
-
-  #midnightSeerCard::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
-    transform: rotate(45deg);
-    pointer-events: none;
-    animation: cardShimmer 3s infinite linear;
-  }
-
-  #midnightSeerCard:hover {
-    transform: scale(1.05);
   }
 
   #homeButton {
@@ -396,28 +359,49 @@
       </select>
     </div>
     <h1 id="title">The Midnight Cards</h1>
-    <div id="midnightSeerCard">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" width="100%" height="100%">
-        <defs>
-          <pattern id="starryPattern" patternUnits="userSpaceOnUse" width="50" height="50">
-            <circle cx="25" cy="25" r="1" fill="#ff69b4" />
-            <circle cx="10" cy="10" r="0.5" fill="#ff69b4" />
-            <circle cx="40" cy="40" r="0.7" fill="#ff69b4" />
-            <circle cx="5" cy="45" r="0.4" fill="#ff69b4" />
-            <circle cx="35" cy="5" r="0.6" fill="#ff69b4" />
-          </pattern>
-        </defs>
-        <rect width="120" height="200" fill="url(#starryPattern)" />
-        <circle cx="60" cy="100" r="40" fill="#2a1340" />
-        <path d="M60 60 Q100 100 60 140 Q20 100 60 60" fill="#9370db" />
-      </svg>
+    <div class="cards-container" id="cardsContainer">
+      <div class="card">
+        <div class="card-inner">
+          <div class="card-front">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" width="100%" height="100%">
+              <defs>
+                <pattern id="starryPattern" patternUnits="userSpaceOnUse" width="50" height="50">
+                  <circle cx="25" cy="25" r="1" fill="#ff69b4" />
+                  <circle cx="10" cy="10" r="0.5" fill="#ff69b4" />
+                  <circle cx="40" cy="40" r="0.7" fill="#ff69b4" />
+                  <circle cx="5" cy="45" r="0.4" fill="#ff69b4" />
+                  <circle cx="35" cy="5" r="0.6" fill="#ff69b4" />
+                </pattern>
+              </defs>
+              <rect width="120" height="200" fill="url(#starryPattern)" />
+              <circle cx="60" cy="100" r="40" fill="#2a1340" />
+              <path d="M60 60 Q100 100 60 140 Q20 100 60 60" fill="#9370db" />
+            </svg>
+          </div>
+          <div class="card-back">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" width="100%" height="100%">
+              <defs>
+                <pattern id="starryPattern" patternUnits="userSpaceOnUse" width="50" height="50">
+                  <circle cx="25" cy="25" r="1" fill="#ff69b4" />
+                  <circle cx="10" cy="10" r="0.5" fill="#ff69b4" />
+                  <circle cx="40" cy="40" r="0.7" fill="#ff69b4" />
+                  <circle cx="5" cy="45" r="0.4" fill="#ff69b4" />
+                  <circle cx="35" cy="5" r="0.6" fill="#ff69b4" />
+                </pattern>
+              </defs>
+              <rect width="120" height="200" fill="url(#starryPattern)" />
+              <circle cx="60" cy="100" r="40" fill="#2a1340" />
+              <path d="M60 60 Q100 100 60 140 Q20 100 60 60" fill="#9370db" />
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="drawOptions">
       <button onclick="drawCards(1)" id="draw1">Draw 1 Card</button>
       <button onclick="drawCards(3)" id="draw3">Draw 3 Cards</button>
       <button onclick="drawCards(5)" id="draw5">Draw 5 Cards</button>
     </div>
-    <div class="cards-container" id="cardsContainer"></div>
     <div id="cardExplanations"></div>
     <footer>Created with ✨ by <a href="https://github.com/HylianSyrup" target="_blank">HylianSyrup</a></footer>
   </div>
@@ -434,7 +418,13 @@
           "La Papesse": "The High Priestess",
           "L'Impératrice": "The Empress",
           "L'Empereur": "The Emperor",
-          "Le Pape": "The Hierophant"
+          "Le Pape": "The Hierophant",
+          "L'Amoureux": "The Lovers",
+          "Le Chariot": "The Chariot",
+          "La Justice": "Justice",
+          "L'Hermite": "The Hermit",
+          "La Roue de Fortune": "The Wheel of Fortune",
+          "La Force": "Strength"
         },
         explanation: "Explanation"
       },
@@ -448,7 +438,13 @@
           "La Papesse": "La Papesse",
           "L'Impératrice": "L'Impératrice",
           "L'Empereur": "L'Empereur",
-          "Le Pape": "Le Pape"
+          "Le Pape": "Le Pape",
+          "L'Amoureux": "L'Amoureux",
+          "Le Chariot": "Le Chariot",
+          "La Justice": "La Justice",
+          "L'Hermite": "L'Hermite",
+          "La Roue de Fortune": "La Roue de Fortune",
+          "La Force": "La Force"
         },
         explanation: "Explication"
       },
@@ -462,7 +458,13 @@
           "La Papesse": "La Sacerdotisa",
           "L'Impératrice": "La Emperatriz",
           "L'Empereur": "El Emperador",
-          "Le Pape": "El Sumo Sacerdote"
+          "Le Pape": "El Sumo Sacerdote",
+          "L'Amoureux": "Los Enamorados",
+          "Le Chariot": "El Carro",
+          "La Justice": "La Justicia",
+          "L'Hermite": "El Ermitaño",
+          "La Roue de Fortune": "La Rueda de la Fortuna",
+          "La Force": "La Fuerza"
         },
         explanation: "Explicación"
       },
@@ -476,7 +478,13 @@
           "La Papesse": "La Papessa",
           "L'Impératrice": "L'Imperatrice",
           "L'Empereur": "L'Imperatore",
-          "Le Pape": "Il Papa"
+          "Le Pape": "Il Papa",
+          "L'Amoureux": "Gli Amanti",
+          "Le Chariot": "Il Carro",
+          "La Justice": "La Giustizia",
+          "L'Hermite": "L'Eremita",
+          "La Roue de Fortune": "La Ruota della Fortuna",
+          "La Force": "La Forza"
         },
         explanation: "Spiegazione"
       },
@@ -490,7 +498,13 @@
           "La Papesse": "A Sacerdotisa",
           "L'Impératrice": "A Imperatriz",
           "L'Empereur": "O Imperador",
-          "Le Pape": "O Papa"
+          "Le Pape": "O Papa",
+          "L'Amoureux": "Os Enamorados",
+          "Le Chariot": "O Carro",
+          "La Justice": "A Justiça",
+          "L'Hermite": "O Eremita",
+          "La Roue de Fortune": "A Roda da Fortuna",
+          "La Force": "A Força"
         },
         explanation: "Explicação"
       }
@@ -502,204 +516,235 @@
       {
         name: "Le Bateleur",
         meaning: {
-          en: "Skill, diplomacy, address, subtlety; sickness, pain, loss, disaster, snares of enemies; self-confidence, will; the Querent, if male.",
-          fr: "Habileté, diplomatie, adresse, subtilité ; maladie, douleur, perte, désastre, pièges des ennemis ; confiance en soi, volonté ; le Consultant, si masculin.",
-          es: "Habilidad, diplomacia, dirección, sutileza; enfermedad, dolor, pérdida, desastre, trampas de enemigos; confianza en sí mismo, voluntad; el Consultante, si es hombre.",
-          it: "Abilità, diplomazia, indirizzo, sottigliezza; malattia, dolore, perdita, disastro, trappole dei nemici; fiducia in sé stessi, volontà; il Consultante, se maschio.",
-          pt: "Habilidade, diplomacia, direção, sutileza; doença, dor, perda, desastre, armadilhas de inimigos; autoconfiança, vontade; o Consulente, se for homem."
-        },
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <rect width="100" height="180" fill="#f0e68c" />
-          <circle cx="50" cy="40" r="20" fill="#4169e1" />
-          <rect x="30" y="70" width="40" height="80" fill="#8b4513" />
-          <path d="M20 160 Q50 140 80 160" stroke="#000" stroke-width="2" fill="none" />
-          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">I</text>
-        </svg>`
+          en: "Evokes untapped potential and new possibilities. Indicates that you are about to start a new project or adventure, and that you possess the necessary skills to succeed. Be attentive to opportunities that present themselves and dare to take initiatives.",
+          fr: "Évoque un potentiel inexploité et de nouvelles possibilités. Indique que vous êtes sur le point de commencer un nouveau projet ou une nouvelle aventure, et que vous possédez les compétences nécessaires pour réussir. Soyez attentif aux opportunités qui se présentent et osez prendre des initiatives.",
+          es: "Evoca un potencial sin explotar y nuevas posibilidades. Indica que estás a punto de comenzar un nuevo proyecto o aventura, y que posees las habilidades necesarias para tener éxito. Mantente atento a las oportunidades que se presentan y atrévete a tomar iniciativas.",
+          it: "Evoca un potenziale non sfruttato e nuove possibilità. Indica che stai per iniziare un nuovo progetto o un'avventura e che possiedi le competenze necessarie per avere successo. Sii attento alle opportunità che si presentano e osa prendere iniziative.",
+          pt: "Evoca potencial inexplorado e novas possibilidades. Indica que você está prestes a iniciar um novo projeto ou aventura, e que possui as habilidades necessárias para ter sucesso. Esteja atento às oportunidades que se apresentam e ouse tomar iniciativas."
+        }
       },
       {
         name: "La Papesse",
         meaning: {
-          en: "Secrets, mystery, the future as yet unrevealed; the woman who interests the Querent, if male; the Querent herself, if female; silence, tenacity; mystery, wisdom, science.",
-          fr: "Secrets, mystère, l'avenir encore non révélé ; la femme qui intéresse le Consultant, si masculin ; la Consultante elle-même, si féminine ; silence, ténacité ; mystère, sagesse, science.",
-          es: "Secretos, misterio, el futuro aún no revelado; la mujer que interesa al Consultante, si es hombre; la Consultante misma, si es mujer; silencio, tenacidad; misterio, sabiduría, ciencia.",
-          it: "Segreti, mistero, il futuro ancora non rivelato; la donna che interessa il Consultante, se maschio; la Consultante stessa, se femmina; silenzio, tenacia; mistero, saggezza, scienza.",
-          pt: "Segredos, mistério, o futuro ainda não revelado; a mulher que interessa ao Consulente, se for homem; a própria Consulente, se for mulher; silêncio, tenacidade; mistério, sabedoria, ciência."
-        },
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <rect width="100" height="180" fill="#f0e68c" />
-          <path d="M30 40 L50 20 L70 40 L70 160 L30 160 Z" fill="#4169e1" />
-          <circle cx="50" cy="60" r="15" fill="#fff" />
-          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">II</text>
-        </svg>`
+          en: "Symbol of wisdom and mystery, she suggests that the answers to your questions lie in your intuition or hidden knowledge. It's a propitious time for introspection and study. Trust your intuition to navigate complex situations.",
+          fr: "Symbole de la sagesse et du mystère, elle suggère que les réponses à vos questions se trouvent dans votre intuition ou dans des connaissances cachées. C'est un moment propice à l'introspection et à l'étude. Faites confiance à votre intuition pour naviguer dans des situations complexes.",
+          es: "Símbolo de sabiduría y misterio, sugiere que las respuestas a tus preguntas se encuentran en tu intuición o en conocimientos ocultos. Es un momento propicio para la introspección y el estudio. Confía en tu intuición para navegar en situaciones complejas.",
+          it: "Simbolo di saggezza e mistero, suggerisce che le risposte alle tue domande si trovano nella tua intuizione o in conoscenze nascoste. È un momento propizio per l'introspezione e lo studio. Fidati della tua intuizione per navigare in situazioni complesse.",
+          pt: "Símbolo de sabedoria e mistério, ela sugere que as respostas para suas perguntas estão em sua intuição ou em conhecimentos ocultos. É um momento propício para introspecção e estudo. Confie em sua intuição para navegar em situações complexas."
+        }
       },
       {
-        name: "L'Impératrice", 
+        name: "L'Impératrice",
         meaning: {
-          en: "Fruitfulness, action, initiative, length of days; the unknown, clandestine; also difficulty, doubt, ignorance.",
-          fr: "Fécondité, action, initiative, longévité ; l'inconnu, le clandestin ; aussi difficulté, doute, ignorance.", 
-          es: "Fecundidad, acción, iniciativa, longevidad; lo desconocido, lo clandestino; también dificultad, duda, ignorancia.",
-          it: "Fecondità, azione, iniziativa, longevità; l'ignoto, il clandestino; anche difficoltà, dubbio, ignoranza.",
-          pt: "Fecundidade, ação, iniciativa, longevidade; o desconhecido, o clandestino; também dificuldade, dúvida, ignorância."
-        },
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <rect width="100" height="180" fill="#f0e68c" />
-          <path d="M20 60 Q50 20 80 60" fill="#ff69b4" />
-          <rect x="35" y="60" width="30" height="80" fill="#4169e1" />
-          <circle cx="50" cy="40" r="15" fill="#ffd700" />
-          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">III</text>
-        </svg>`
+          en: "Represents creativity, abundance, and fertility. It announces a period of growth and fulfillment in your projects or relationships. Expect to see your efforts bear fruit. It's also a sign of material prosperity and family harmony.",
+          fr: "Représente la créativité, l'abondance et la fertilité. Elle annonce une période de croissance et d'épanouissement dans vos projets ou relations. Attendez-vous à voir vos efforts porter leurs fruits. C'est aussi un signe de prospérité matérielle et d'harmonie familiale.",
+          es: "Representa la creatividad, la abundancia y la fertilidad. Anuncia un período de crecimiento y realización en tus proyectos o relaciones. Espera ver tus esfuerzos dar frutos. También es un signo de prosperidad material y armonía familiar.",
+          it: "Rappresenta la creatività, l'abbondanza e la fertilità. Annuncia un periodo di crescita e realizzazione nei tuoi progetti o relazioni. Aspettati di vedere i tuoi sforzi portare frutti. È anche un segno di prosperità materiale e armonia familiare.",
+          pt: "Representa a criatividade, a abundância e a fertilidade. Ela anuncia um período de crescimento e realização em seus projetos ou relacionamentos. Espere ver seus esforços darem frutos. Também é um sinal de prosperidade material e harmonia familiar."
+        }
       },
       {
         name: "L'Empereur",
         meaning: {
-          en: "Stability, power, protection, realization; a great person; aid, reason, conviction; also authority and will.",
-          fr: "Stabilité, pouvoir, protection, réalisation ; une grande personne ; aide, raison, conviction ; aussi autorité et volonté.",
-          es: "Estabilidad, poder, protección, realización; una gran persona; ayuda, razón, convicción; también autoridad y voluntad.",
-          it: "Stabilità, potere, protezione, realizzazione; una grande persona; aiuto, ragione, convinzione; anche autorità e volontà.",
-          pt: "Estabilidade, poder, proteção, realização; uma grande pessoa; ajuda, razão, convicção; também autoridade e vontade."
-        },
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <rect width="100" height="180" fill="#f0e68c" />
-          <rect x="30" y="40" width="40" height="100" fill="#8b4513" />
-          <path d="M20 30 L50 10 L80 30" stroke="#ffd700" stroke-width="2" fill="none" />
-          <circle cx="50" cy="50" r="15" fill="#ff0000" />
-          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">IIII</text>
-        </svg>`
+          en: "Incarnation of authority and structure. This card indicates a need for stability and control. You might be called upon to assume responsibilities or provide clear direction in your professional or personal life. Discipline and order will be your allies.",
+          fr: "Incarnation de l'autorité et de la structure. Cette carte indique un besoin de stabilité et de contrôle. Vous pourriez être appelé à assumer des responsabilités ou à fournir une direction claire dans votre vie professionnelle ou personnelle. La discipline et l'ordre seront vos alliés.",
+          es: "Encarnación de la autoridad y la estructura. Esta carta indica una necesidad de estabilidad y control. Podrías ser llamado a asumir responsabilidades o proporcionar una dirección clara en tu vida profesional o personal. La disciplina y el orden serán tus aliados.",
+          it: "Incarnazione dell'autorità e della struttura. Questa carta indica un bisogno di stabilità e controllo. Potresti essere chiamato ad assumere responsabilità o fornire una direzione chiara nella tua vita professionale o personale. La disciplina e l'ordine saranno i tuoi alleati.",
+          pt: "Encarnação da autoridade e da estrutura. Esta carta indica uma necessidade de estabilidade e controle. Você pode ser chamado a assumir responsabilidades ou fornecer uma direção clara em sua vida profissional ou pessoal. A disciplina e a ordem serão seus aliados."
+        }
       },
       {
         name: "Le Pape",
         meaning: {
-          en: "Marriage, alliance, captivity, servitude; by another account, mercy and goodness; inspiration; the man to whom the Querent has recourse.",
-          fr: "Mariage, alliance, captivité, servitude ; selon un autre compte, miséricorde et bonté ; inspiration ; l'homme auquel le Consultant a recours.", 
-          es: "Matrimonio, alianza, cautiverio, servidumbre; según otra cuenta, misericordia y bondad; inspiración; el hombre al que recurre el Consultante.",
-          it: "Matrimonio, alleanza, prigionia, servitù; secondo un altro conto, misericordia e bontà; ispirazione; l'uomo a cui il Consultante fa ricorso.",
-          pt: "Casamento, aliança, cativeiro, servidão; segundo outra conta, misericórdia e bondade; inspiração; o homem a quem o Consulente recorre."
-        },
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-          <rect width="100" height="180" fill="#f0e68c" />
-          <path d="M30 40 L50 20 L70 40 L70 160 L30 160 Z" fill="#800080" />
-          <circle cx="50" cy="60" r="15" fill="#fff" />
-          <path d="M40 100 L60 100" stroke="#ffd700" stroke-width="2" />
-          <text x="50" y="175" font-family="serif" font-size="12" text-anchor="middle">V</text>
-        </svg>`
+          en: "Symbolizes tradition, spirituality, and guidance. This card suggests seeking advice from a mentor or exploring your spiritual beliefs. It may indicate a time for learning, teaching, or mediating conflicts. Trust in established wisdom and conventional approaches.",
+          fr: "Symbolise la tradition, la spiritualité et les conseils. Cette carte suggère de chercher l'avis d'un mentor ou d'explorer vos croyances spirituelles. Elle peut indiquer un moment propice à l'apprentissage, l'enseignement ou la médiation de conflits. Faites confiance à la sagesse établie et aux approches conventionnelles.",
+          es: "Simboliza la tradición, la espiritualidad y la orientación. Esta carta sugiere buscar el consejo de un mentor o explorar tus creencias espirituales. Puede indicar un momento para aprender, enseñar o mediar en conflictos. Confía en la sabiduría establecida y los enfoques convencionales.",
+          it: "Simboleggia la tradizione, la spiritualità e la guida. Questa carta suggerisce di cercare il consiglio di un mentore o di esplorare le proprie credenze spirituali. Può indicare un momento per imparare, insegnare o mediare conflitti. Abbi fiducia nella saggezza consolidata e negli approcci convenzionali.",
+          pt: "Simboliza a tradição, a espiritualidade e a orientação. Esta carta sugere buscar o conselho de um mentor ou explorar suas crenças espirituais. Pode indicar um momento para aprender, ensinar ou mediar conflitos. Confie na sabedoria estabelecida e nas abordagens convencionais."
+        }
+      },
+      {
+        name: "L'Amoureux",
+        meaning: {
+          en: "Represents choices, relationships, and harmony. This card often appears when you're faced with a significant decision, especially in matters of the heart. It suggests the need for balance and alignment of values in relationships. Trust your heart, but also use your head.",
+          fr: "Représente les choix, les relations et l'harmonie. Cette carte apparaît souvent lorsque vous êtes confronté à une décision importante, en particulier dans les affaires de cœur. Elle suggère le besoin d'équilibre et d'alignement des valeurs dans les relations. Faites confiance à votre cœur, mais utilisez aussi votre tête.",
+          es: "Representa elecciones, relaciones y armonía. Esta carta a menudo aparece cuando te enfrentas a una decisión significativa, especialmente en asuntos del corazón. Sugiere la necesidad de equilibrio y alineación de valores en las relaciones. Confía en tu corazón, pero también usa tu cabeza.",
+          it: "Rappresenta scelte, relazioni e armonia. Questa carta appare spesso quando ti trovi di fronte a una decisione importante, specialmente in questioni di cuore. Suggerisce la necessità di equilibrio e allineamento dei valori nelle relazioni. Fidati del tuo cuore, ma usa anche la testa.",
+          pt: "Representa escolhas, relacionamentos e harmonia. Esta carta frequentemente aparece quando você está enfrentando uma decisão significativa, especialmente em questões do coração. Sugere a necessidade de equilíbrio e alinhamento de valores nos relacionamentos. Confie em seu coração, mas também use sua cabeça."
+        }
+      },
+      {
+        name: "Le Chariot",
+        meaning: {
+          en: "Symbolizes victory, willpower, and forward movement. This card indicates that you're in control and moving in the right direction. It suggests overcoming obstacles through determination and self-discipline. Stay focused on your goals and maintain a positive attitude.",
+          fr: "Symbolise la victoire, la volonté et le mouvement vers l'avant. Cette carte indique que vous êtes en contrôle et que vous avancez dans la bonne direction. Elle suggère de surmonter les obstacles grâce à la détermination et à l'autodiscipline. Restez concentré sur vos objectifs et maintenez une attitude positive.",
+          es: "Simboliza la victoria, la fuerza de voluntad y el movimiento hacia adelante. Esta carta indica que estás en control y moviéndote en la dirección correcta. Sugiere superar obstáculos a través de la determinación y la autodisciplina. Mantén el enfoque en tus metas y conserva una actitud positiva.",
+          it: "Simboleggia la vittoria, la forza di volontà e il movimento in avanti. Questa carta indica che sei in controllo e ti stai muovendo nella giusta direzione. Suggerisce di superare gli ostacoli attraverso la determinazione e l'autodisciplina. Rimani concentrato sui tuoi obiettivi e mantieni un atteggiamento positivo.",
+          pt: "Simboliza a vitória, a força de vontade e o movimento para frente. Esta carta indica que você está no controle e se movendo na direção certa. Sugere superar obstáculos através da determinação e autodisciplina. Mantenha o foco em seus objetivos e mantenha uma atitude positiva."
+        }
+      },
+      {
+        name: "La Justice",
+        meaning: {
+          en: "Represents fairness, truth, and the law. This card suggests that you're in a period where balance and fairness are crucial. It may indicate legal matters or important decisions that require careful consideration. Be objective, weigh all factors, and act with integrity.",
+          fr: "Représente l'équité, la vérité et la loi. Cette carte suggère que vous êtes dans une période où l'équilibre et l'équité sont cruciaux. Elle peut indiquer des questions juridiques ou des décisions importantes qui nécessitent une réflexion approfondie. Soyez objectif, pesez tous les facteurs et agissez avec intégrité.",
+          es: "Representa la equidad, la verdad y la ley. Esta carta sugiere que estás en un período donde el equilibrio y la justicia son cruciales. Puede indicar asuntos legales o decisiones importantes que requieren una consideración cuidadosa. Sé objetivo, sopesa todos los factores y actúa con integridad.",
+          it: "Rappresenta l'equità, la verità e la legge. Questa carta suggerisce che sei in un periodo in cui l'equilibrio e la giustizia sono cruciali. Può indicare questioni legali o decisioni importanti che richiedono un'attenta considerazione. Sii obiettivo, pondera tutti i fattori e agisci con integrità.",
+          pt: "Representa a justiça, a verdade e a lei. Esta carta sugere que você está em um período onde o equilíbrio e a justiça são cruciais. Pode indicar questões legais ou decisões importantes que requerem consideração cuidadosa. Seja objetivo, pese todos os fatores e aja com integridade."
+        }
+      },
+      {
+        name: "L'Hermite",
+        meaning: {
+          en: "Symbolizes introspection, solitude, and inner guidance. This card suggests a period of withdrawal and reflection. It's a time to seek wisdom from within, to meditate, and to listen to your inner voice. You may need to take a break from the outside world to find your path.",
+          fr: "Symbolise l'introspection, la solitude et la guidance intérieure. Cette carte suggère une période de retrait et de réflexion. C'est le moment de chercher la sagesse en soi, de méditer et d'écouter sa voix intérieure. Vous pourriez avoir besoin de faire une pause du monde extérieur pour trouver votre chemin.",
+          es: "Simboliza la introspección, la soledad y la guía interior. Esta carta sugiere un período de retiro y reflexión. Es un momento para buscar la sabiduría desde dentro, meditar y escuchar tu voz interior. Puede que necesites tomar un descanso del mundo exterior para encontrar tu camino.",
+          it: "Simboleggia l'introspezione, la solitudine e la guida interiore. Questa carta suggerisce un periodo di ritiro e riflessione. È il momento di cercare la saggezza dentro di sé, meditare e ascoltare la propria voce interiore. Potresti aver bisogno di prenderti una pausa dal mondo esterno per trovare la tua strada.",
+          pt: "Simboliza a introspecção, a solidão e a orientação interior. Esta carta sugere um período de recolhimento e reflexão. É hora de buscar a sabedoria interior, meditar e ouvir sua voz interna. Você pode precisar fazer uma pausa do mundo exterior para encontrar seu caminho."
+        }
+      },
+      {
+        name: "La Roue de Fortune",
+        meaning: {
+          en: "Represents cycles, fate, and sudden changes. This card indicates that life is in flux and that change is coming, whether good or bad. It reminds you that both fortune and misfortune are temporary. Be prepared to adapt to new circumstances and trust in the natural cycles of life.",
+          fr: "Représente les cycles, le destin et les changements soudains. Cette carte indique que la vie est en mouvement et que le changement arrive, qu'il soit bon ou mauvais. Elle vous rappelle que la fortune et l'infortune sont temporaires. Soyez prêt à vous adapter à de nouvelles circonstances et faites confiance aux cycles naturels de la vie.",
+          es: "Representa ciclos, destino y cambios repentinos. Esta carta indica que la vida está en flujo y que el cambio está llegando, ya sea bueno o malo. Te recuerda que tanto la fortuna como la desgracia son temporales. Prepárate para adaptarte a nuevas circunstancias y confía en los ciclos naturales de la vida.",
+          it: "Rappresenta cicli, destino e cambiamenti improvvisi. Questa carta indica che la vita è in movimento e che il cambiamento sta arrivando, che sia buono o cattivo. Ti ricorda che sia la fortuna che la sfortuna sono temporanee. Sii pronto ad adattarti a nuove circostanze e abbi fiducia nei cicli naturali della vita.",
+          pt: "Representa ciclos, destino e mudanças repentinas. Esta carta indica que a vida está em fluxo e que a mudança está chegando, seja boa ou ruim. Ela lembra que tanto a fortuna quanto o infortúnio são temporários. Esteja preparado para se adaptar a novas circunstâncias e confie nos ciclos naturais da vida."
+        }
+      },
+      {
+        name: "La Force",
+        meaning: {
+          en: "Symbolizes inner strength, courage, and compassion. This card suggests that you have the inner power to overcome challenges. It encourages you to approach difficulties with patience and understanding rather than aggression. Trust in your ability to influence situations through gentle persuasion and inner resolve.",
+          fr: "Symbolise la force intérieure, le courage et la compassion. Cette carte suggère que vous avez la force intérieure pour surmonter les défis. Elle vous encourage à aborder les difficultés avec patience et compréhension plutôt qu'avec agressivité. Faites confiance à votre capacité à influencer les situations par une douce persuasion et une résolution intérieure.",
+          es: "Simboliza la fuerza interior, el coraje y la compasión. Esta carta sugiere que tienes el poder interno para superar los desafíos. Te anima a abordar las dificultades con paciencia y comprensión en lugar de agresión. Confía en tu capacidad para influir en las situaciones a través de la persuasión gentil y la resolución interna.",
+          it: "Simboleggia la forza interiore, il coraggio e la compassione. Questa carta suggerisce che hai la forza interiore per superare le sfide. Ti incoraggia ad affrontare le difficoltà con pazienza e comprensione piuttosto che con aggressività. Abbi fiducia nella tua capacità di influenzare le situazioni attraverso la persuasione gentile e la determinazione interiore.",
+          pt: "Simboliza força interior, coragem e compaixão. Esta carta sugere que você tem o poder interno para superar desafios. Ela o encoraja a abordar as dificuldades com paciência e compreensão, em vez de agressão. Confie em sua capacidade de influenciar situações através da persuasão gentil e da resolução interna."
+        }
       }
     ];
 
-    let currentReading = [];
-
-    function createCardElement(card) {
-      const cardElement = document.createElement('div');
-      cardElement.className = 'card';
-      cardElement.innerHTML = `
-        <div class="card-inner">
-          <div class="card-front">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180">
-              <rect width="100" height="180" fill="#3d1c56" />
-              <circle cx="50" cy="90" r="30" fill="#2a1340" stroke="#ff69b4" stroke-width="2" />
-              <path d="M30 40 Q50 20 70 40 T110 40" stroke="#ff69b4" stroke-width="2" fill="none" />
-              <path d="M30 140 Q50 160 70 140 T110 140" stroke="#ff69b4" stroke-width="2" fill="none" />
-              <circle cx="30" cy="30" r="2" fill="#ff69b4" />
-              <circle cx="70" cy="30" r="2" fill="#ff69b4" />
-              <circle cx="30" cy="150" r="2" fill="#ff69b4" />
-              <circle cx="70" cy="150" r="2" fill="#ff69b4" />
-            </svg>
-          </div>
-          <div class="card-back">
-            ${card.svg}
-            <div class="card-name">${translations[currentLanguage].cardNames[card.name]}</div>
-          </div>
-        </div>
-      `;
-      return cardElement;
-    }
-
     function drawCards(numCards) {
       const cardsContainer = document.getElementById('cardsContainer');
-      const midnightSeerCard = document.getElementById('midnightSeerCard');
-      const drawOptions = document.getElementById('drawOptions');
+      const cardExplanations = document.getElementById('cardExplanations');
       cardsContainer.innerHTML = '';
-      midnightSeerCard.style.display = 'none';
-      drawOptions.style.display = 'none';
+      cardExplanations.innerHTML = '';
 
-      currentReading = [];
+      const drawnCards = [];
       const availableCards = [...tarotCards];
 
       for (let i = 0; i < numCards; i++) {
+        if (availableCards.length === 0) break;
         const randomIndex = Math.floor(Math.random() * availableCards.length);
-        const randomCard = availableCards.splice(randomIndex, 1)[0];
-        currentReading.push(randomCard);
-      }
+        const card = availableCards.splice(randomIndex, 1)[0];
+        drawnCards.push(card);
 
-      displayCards();
-      explainCards();
-    }
-
-    function displayCards() {
-      const cardsContainer = document.getElementById('cardsContainer');
-      cardsContainer.innerHTML = '';
-      
-      currentReading.forEach((card, index) => {
-        const cardElement = createCardElement(card);
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card';
+        cardElement.innerHTML = `
+          <div class="card-inner">
+            <div class="card-front">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" width="100%" height="100%">
+                <defs>
+                  <pattern id="starryPattern${i}" patternUnits="userSpaceOnUse" width="50" height="50">
+                    <circle cx="25" cy="25" r="1" fill="#ff69b4" />
+                    <circle cx="10" cy="10" r="0.5" fill="#ff69b4" />
+                    <circle cx="40" cy="40" r="0.7" fill="#ff69b4" />
+                    <circle cx="5" cy="45" r="0.4" fill="#ff69b4" />
+                    <circle cx="35" cy="5" r="0.6" fill="#ff69b4" />
+                  </pattern>
+                </defs>
+                <rect width="120" height="200" fill="url(#starryPattern${i})" />
+                <circle cx="60" cy="100" r="40" fill="#2a1340" />
+                <path d="M60 60 Q100 100 60 140 Q20 100 60 60" fill="#9370db" />
+              </svg>
+            </div>
+            <div class="card-back">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" width="100%" height="100%">
+                <defs>
+                  <pattern id="starryPattern${i}back" patternUnits="userSpaceOnUse" width="50" height="50">
+                    <circle cx="25" cy="25" r="1" fill="#ff69b4" />
+                    <circle cx="10" cy="10" r="0.5" fill="#ff69b4" />
+                    <circle cx="40" cy="40" r="0.7" fill="#ff69b4" />
+                    <circle cx="5" cy="45" r="0.4" fill="#ff69b4" />
+                    <circle cx="35" cy="5" r="0.6" fill="#ff69b4" />
+                  </pattern>
+                </defs>
+                <rect width="120" height="200" fill="url(#starryPattern${i}back)" />
+                <circle cx="60" cy="100" r="40" fill="#2a1340" />
+                <path d="M60 60 Q100 100 60 140 Q20 100 60 60" fill="#9370db" />
+              </svg>
+              <div class="card-name">${translations[currentLanguage].cardNames[card.name]}</div>
+            </div>
+          </div>
+        `;
         cardsContainer.appendChild(cardElement);
-        
+
         setTimeout(() => {
           cardElement.classList.add('flipped');
-          createSparkles(cardElement);
-        }, index * 700);
-      });
-    }
+        }, i * 500 + 500);
 
-    function explainCards() {
-      const explanationContainer = document.getElementById('cardExplanations');
-      explanationContainer.innerHTML = '';
-
-      currentReading.forEach((card, index) => {
-        const explanation = document.createElement('div');
-        explanation.className = 'card-explanation';
-        explanation.innerHTML = `
+        const explanationElement = document.createElement('div');
+        explanationElement.className = 'card-explanation';
+        explanationElement.innerHTML = `
           <h3>${translations[currentLanguage].cardNames[card.name]}</h3>
-          <p>${translations[currentLanguage].explanation}: ${card.meaning[currentLanguage]}</p>
+          <p>${card.meaning[currentLanguage]}</p>
         `;
-        explanationContainer.appendChild(explanation);
-      });
+        cardExplanations.appendChild(explanationElement);
+      }
+
+      document.getElementById('drawOptions').style.display = 'none';
     }
 
     function changeLanguage() {
       currentLanguage = document.getElementById('languageSelector').value;
+      updateTranslations();
+    }
+
+    function updateTranslations() {
       document.getElementById('title').textContent = translations[currentLanguage].title;
       document.getElementById('draw1').textContent = translations[currentLanguage].draw1;
       document.getElementById('draw3').textContent = translations[currentLanguage].draw3;
       document.getElementById('draw5').textContent = translations[currentLanguage].draw5;
 
-      displayCards();
-      explainCards();
-    }
+      const cardNames = document.querySelectorAll('.card-name');
+      cardNames.forEach(cardName => {
+        const originalName = Object.keys(translations[currentLanguage].cardNames).find(key => translations[currentLanguage].cardNames[key] === cardName.textContent);
+        if (originalName) {
+          cardName.textContent = translations[currentLanguage].cardNames[originalName];
+        }
+      });
 
-    function createSparkles(element) {
-      for (let i = 0; i < 10; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.left = `${Math.random() * element.offsetWidth}px`;
-        sparkle.style.top = `${Math.random() * element.offsetHeight}px`;
-        sparkle.style.animationDelay = `${Math.random() * 1.5}s`;
-        element.appendChild(sparkle);
-      }
+      const cardExplanations = document.querySelectorAll('.card-explanation');
+      cardExplanations.forEach(explanation => {
+        const cardName = explanation.querySelector('h3').textContent;
+        const originalName = Object.keys(translations[currentLanguage].cardNames).find(key => translations[currentLanguage].cardNames[key] === cardName);
+        if (originalName) {
+          const card = tarotCards.find(c => c.name === originalName);
+          explanation.querySelector('h3').textContent = translations[currentLanguage].cardNames[originalName];
+          explanation.querySelector('p').textContent = card.meaning[currentLanguage];
+        }
+      });
     }
 
     function goHome() {
-      const cardsContainer = document.getElementById('cardsContainer');
-      const midnightSeerCard = document.getElementById('midnightSeerCard');
-      const drawOptions = document.getElementById('drawOptions');
-      const cardExplanations = document.getElementById('cardExplanations');
-
-      cardsContainer.innerHTML = '';
-      cardExplanations.innerHTML = '';
-      midnightSeerCard.style.display = 'block';
-      drawOptions.style.display = 'block';
+      location.reload();
     }
 
-    // Initialize
-    changeLanguage();
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = Math.random() * window.innerWidth + 'px';
+      sparkle.style.top = Math.random() * window.innerHeight + 'px';
+      document.body.appendChild(sparkle);
+
+      setTimeout(() => {
+        sparkle.remove();
+      }, 1500);
+    }
+
+    setInterval(createSparkle, 300);
   </script>
 </body>
 </html>
